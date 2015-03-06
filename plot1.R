@@ -23,20 +23,19 @@ endDate <- "2007-02-02"
 #############################################
 
 ## Load data
-consumptionData <- read.table(dataFile, sep=";",header=TRUE, na.strings="?", comment.char="")
+consumptionData <- read.table(dataFile, sep=";",header=TRUE, na.strings="?", comment.char="", stringsAsFactors=FALSE)
 ## Calculates date & time and subset data
 consumptionData <- consumptionData %>%
         mutate(datetime=dmy_hms(paste(Date, Time))) %>% ## add the column datetime
-        filter(datetime>=ymd(startDate), datetime<=(ymd(endDate)+days(1))) ## subset the data
+        filter(datetime>=ymd(startDate), datetime<(ymd(endDate)+days(1))) ## subset the data
 
 ##########################################
 ##              Plot 1                  ##
 ##########################################
 
-## set number of graphics by device (necessary to overide previous settings)
-par(mfrow=c(1,1))
+## Open the device
+png(filename="plot1.png",width = 480, height = 480)
 ## Plot the graphic
 hist(consumptionData$Global_active_power, col="red", main="Global Active Power", xlab="Global Active Power (kilowatts)")
-## Export the graphic to PNG file
-dev.copy(png, file="plot1.png", width=480, height=480)
+## Close the device
 dev.off()
